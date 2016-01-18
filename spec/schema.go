@@ -167,7 +167,7 @@ type Operation struct {
 	Schemes []string `json:"schemes,omitempty"`
 	// Declares this operation to be deprecated. Usage of the declared operation should
 	// be refrained. Default value is false.
-	Deprecated boolean `json:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty"`
 	// A declaration of which security schemes are applied for this operation. The list
 	// of values describes alternative security schemes that can be used (that is,
 	// there is a logical OR between the security requirements). This definition
@@ -205,7 +205,7 @@ type Parameter struct {
 	// Determines whether this parameter is mandatory. If the parameter is in "path",
 	// this property is required and its value MUST be true. Otherwise, the property
 	// MAY be included and its default value is false.
-	Required boolean `json:"required,omitempty"`
+	Required bool `json:"required,omitempty"`
 }
 
 // A limited subset of JSON-Schema's items object. It is used by parameter definitions
@@ -228,15 +228,15 @@ type Items struct {
 	// (Note: "default" has no meaning for required items.) See
 	// http://json-schema.org/latest/json-schema-validation.html#anchor101. Unlike JSON
 	// Schema this value MUST conform to the defined type for the data type.
-	Default string `json:"default,omitempty"`
+	Default json.RawMessage `json:"default,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
 	Maximum float64 `json:"maximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
-	ExclusiveMaximum boolean `json:"exclusiveMaximum,omitempty"`
+	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
 	Minimum float64 `json:"minimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
-	ExclusiveMinimum boolean `json:"exclusiveMinimum,omitempty"`
+	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor26.
 	MaxLength int `json:"maxLength,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor29.
@@ -248,9 +248,9 @@ type Items struct {
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor45.
 	MinItems int `json:"minItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor49.
-	UniqueItems boolean `json:"uniqueItems,omitempty"`
+	UniqueItems bool `json:"uniqueItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor76.
-	Enum []string `json:"enum,omitempty"`
+	Enum []json.RawMessage `json:"enum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor14.
 	MultipleOf float64 `json:"multipleOf,omitempty"`
 }
@@ -268,6 +268,54 @@ type Response struct {
 	Headers *Headers `json:"headers,omitempty"`
 	// An example of the response message.
 	Examples *Example `json:"examples,omitempty"`
+}
+
+
+type Header struct {
+	// A short description of the header.
+	Description string `json:"description,omitempty"`
+	// The type of the object. The value MUST be one of "string", "number", "integer",
+	// "boolean", or "array".
+	Type string `json:"type"`
+	// The extending format for the previously mentioned type. See Data Type Formats
+	// for further details.
+	Format string `json:"format,omitempty"`
+	// Required if type is "array". Describes the type of items in the array.
+	Items *Items `json:"items,omitempty"`
+	// Determines the format of the array if type array is used. Possible values are:
+	// csv - comma separated values foo,bar. ssv - space separated values foo bar. tsv
+	// - tab separated values foo\tbar. pipes - pipe separated values foo|bar.  Default
+	// value is csv.
+	CollectionFormat string `json:"collectionFormat,omitempty"`
+	// Declares the value of the header that the server will use if none is provided.
+	// (Note: "default" has no meaning for required headers.) See
+	// http://json-schema.org/latest/json-schema-validation.html#anchor101. Unlike JSON
+	// Schema this value MUST conform to the defined type for the header.
+	Default json.RawMessage `json:"default,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
+	Maximum float64 `json:"maximum,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
+	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
+	Minimum float64 `json:"minimum,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
+	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor26.
+	MaxLength int `json:"maxLength,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor29.
+	MinLength int `json:"minLength,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor33.
+	Pattern string `json:"pattern,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor42.
+	MaxItems int `json:"maxItems,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor45.
+	MinItems int `json:"minItems,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor49.
+	UniqueItems bool `json:"uniqueItems,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor76.
+	Enum []json.RawMessage `json:"enum,omitempty"`
+	// See http://json-schema.org/latest/json-schema-validation.html#anchor14.
+	MultipleOf float64 `json:"multipleOf,omitempty"`
 }
 
 // Allows adding meta data to a single tag that is used by the Operation Object. It is
@@ -314,7 +362,7 @@ type Schema struct {
 	// "read only". This means that it MAY be sent as part of a response but MUST NOT
 	// be sent as part of the request. Properties marked as readOnly being true SHOULD
 	// NOT be in the required list of the defined schema. Default value is false.
-	ReadOnly boolean `json:"readOnly,omitempty"`
+	ReadOnly bool `json:"readOnly,omitempty"`
 	// This MAY be used only on properties schemas. It has no effect on root schemas.
 	// Adds Additional metadata to describe the XML representation format of this property.
 	Xml *XML `json:"xml,omitempty"`
@@ -341,12 +389,12 @@ type XML struct {
 	Prefix string `json:"prefix,omitempty"`
 	// Declares whether the property definition translates to an attribute instead of
 	// an element. Default value is false.
-	Attribute boolean `json:"attribute,omitempty"`
+	Attribute bool `json:"attribute,omitempty"`
 	// MAY be used only for an array definition. Signifies whether the array is wrapped
 	// (for example, <books><book/><book/></books>) or unwrapped (<book/><book/>).
 	// Default value is false. The definition takes effect only when defined alongside
 	// type being array (outside the items).
-	Wrapped boolean `json:"wrapped,omitempty"`
+	Wrapped bool `json:"wrapped,omitempty"`
 }
 
 // Allows the definition of a security scheme that can be used by the operations.
@@ -402,7 +450,7 @@ type ParametersDefinitions map[string]Parameter
 //
 // The Responses Object MUST contain at least one response code, and it SHOULD be the
 // response for a successful operation call.
-type Responses map[string]ResponseObject
+type Responses map[string]Response
 
 // An object to hold responses to be reused across operations. Response definitions can
 // be referenced to the ones defined here.
@@ -417,6 +465,14 @@ type Scopes map[string]string
 // does not enforce the security schemes on the operations and only serves to provide
 // the relevant details for each scheme.
 type SecurityDefinitions map[string]SecurityScheme
+
+// Lists the required security schemes to execute this operation. The object can have
+// multiple security schemes declared in it which are all required (that is, there is a
+// logical AND between the schemes).
+//
+// The name used for each property MUST correspond to a security scheme declared in the
+// Security Definitions.
+type SecurityRequirement map[string][]string
 
 // Lists the headers that can be sent as part of a response.
 type Headers map[string]Header

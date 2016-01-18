@@ -27,10 +27,11 @@ var specialTypes = []struct {
 	{"Example", `map[string]json.RawMessage`},
 	{"Paths", `map[string]PathItem`},
 	{"ParametersDefinitions", `map[string]Parameter`},
-	{"Responses", `map[string]ResponseObject`},
+	{"Responses", `map[string]Response`},
 	{"ResponsesDefinitions", `map[string]Response`},
 	{"Scopes", `map[string]string`},
 	{"SecurityDefinitions", `map[string]SecurityScheme`},
+	{"SecurityRequirement", `map[string][]string`},
 	{"Headers", `map[string]Header`},
 }
 
@@ -57,11 +58,11 @@ var canBeReference = map[string]bool{
 var typeMappings = map[string]string{
 	"string":  "string",
 	"number":  "float64",
-	"boolean": "boolean",
+	"boolean": "bool",
 	"integer": "int",
 	"Any":     "interface{}",
-	"*":       "string",
-	"[*]":     "[]string",
+	"*":       "json.RawMessage",
+	"[*]":     "[]json.RawMessage",
 }
 
 func objName(s string) string {
@@ -144,6 +145,27 @@ import "encoding/json"
 
 	var name string
 
+	parseTable := func(c *html.Node) {
+		table := nextSibling(c, byAtom(atom.Table))
+		if table == nil {
+			fmt.Fprintf(os.Stderr, "<table> does not follow field fields for %s\n", name)
+			os.Exit(2)
+		}
+		p, err := newTableParser(table)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "table %s failed %v\n", name, err)
+			os.Exit(2)
+		}
+
+		fmt.Fprintln(&doc, "\n"+commentStrings[name])
+
+		fmt.Fprintln(&doc, "type", name, "struct {")
+		for _, field := range p.fields() {
+			fmt.Fprintln(&doc, field)
+		}
+		fmt.Fprintln(&doc, "}")
+	}
+
 	for c := schema.NextSibling; c != nil && c.DataAtom != atom.H3; c = c.NextSibling {
 		switch c.DataAtom {
 		case atom.H4:
@@ -159,35 +181,22 @@ import "encoding/json"
 				lines = append(lines, "// "+strings.Join(wrapStringAfter(text(s), 85), "\n// "))
 				commentStrings[name] = strings.Join(lines, "\n//\n")
 			}
+			// For some reason "Header Object" does not have a "Fixed Fields" field.
+			if name == "Header" {
+				parseTable(c)
+			}
 		case atom.H5:
 			if text(c) != "Fixed Fields" || specialType(name) != "" {
 				continue
 			}
-			table := nextSibling(c, byAtom(atom.Table))
-			if table == nil {
-				fmt.Fprintf(os.Stderr, "<table> does not follow field fields for %s\n", name)
-				os.Exit(2)
-			}
-			p, err := newTableParser(table)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "table %s failed %v\n", name, err)
-				os.Exit(2)
-			}
-
-			fmt.Fprintln(&doc, "\n"+commentStrings[name])
-
-			fmt.Fprintln(&doc, "type", name, "struct {")
-			for _, field := range p.fields() {
-				fmt.Fprintln(&doc, field)
-			}
-			fmt.Fprintln(&doc, "}")
+			parseTable(c)
 		}
 	}
 	for _, t := range specialTypes {
 		fmt.Fprintf(&doc, "\n%s\ntype %s %s\n", commentStrings[t.Name], t.Name, t.Val)
 	}
-	if err := ioutil.WriteFile("obj.go", doc.Bytes(), 0644); err != nil {
-		fmt.Fprintln(os.Stderr, "failed to write obj.go", err)
+	if err := ioutil.WriteFile("schema.go", doc.Bytes(), 0644); err != nil {
+		fmt.Fprintln(os.Stderr, "failed to write schema.go", err)
 		os.Exit(2)
 	}
 }
