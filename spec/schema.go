@@ -33,17 +33,17 @@ type Swagger struct {
 	// overridden on specific API calls. Value MUST be as described under Mime Types.
 	Produces []string `json:"produces,omitempty"`
 	// The available paths and operations for the API.
-	Paths *Paths `json:"paths"`
+	Paths Paths `json:"paths"`
 	// An object to hold data types produced and consumed by operations.
-	Definitions *Definitions `json:"definitions,omitempty"`
+	Definitions Definitions `json:"definitions,omitempty"`
 	// An object to hold parameters that can be used across operations. This property
 	// does not define global parameters for all operations.
-	Parameters *ParametersDefinitions `json:"parameters,omitempty"`
+	Parameters ParametersDefinitions `json:"parameters,omitempty"`
 	// An object to hold responses that can be used across operations. This property
 	// does not define global responses for all operations.
-	Responses *ResponsesDefinitions `json:"responses,omitempty"`
+	Responses ResponsesDefinitions `json:"responses,omitempty"`
 	// Security scheme definitions that can be used across the specification.
-	SecurityDefinitions *SecurityDefinitions `json:"securityDefinitions,omitempty"`
+	SecurityDefinitions SecurityDefinitions `json:"securityDefinitions,omitempty"`
 	// A declaration of which security schemes are applied for the API as a whole. The
 	// list of values describes alternative security schemes that can be used (that is,
 	// there is a logical OR between the security requirements). Individual operations
@@ -161,7 +161,7 @@ type Operation struct {
 	// Object's parameters. There can be one "body" parameter at most.
 	Parameters []Parameter `json:"parameters,omitempty"`
 	// The list of possible responses as they are returned from executing this operation.
-	Responses *Responses `json:"responses"`
+	Responses Responses `json:"responses"`
 	// The transfer protocol for the operation. Values MUST be from the list: "http",
 	// "https", "ws", "wss". The value overrides the Swagger Object schemes definition.
 	Schemes []string `json:"schemes,omitempty"`
@@ -265,9 +265,9 @@ type Response struct {
 	// be "file". This SHOULD be accompanied by a relevant produces mime-type.
 	Schema *Schema `json:"schema,omitempty"`
 	// A list of headers that are sent with the response.
-	Headers *Headers `json:"headers,omitempty"`
+	Headers Headers `json:"headers,omitempty"`
 	// An example of the response message.
-	Examples *Example `json:"examples,omitempty"`
+	Examples Example `json:"examples,omitempty"`
 }
 
 
@@ -369,7 +369,7 @@ type Schema struct {
 	// Additional external documentation for this schema.
 	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty"`
 	// A free-form property to include a an example of an instance for this schema.
-	Example interface{} `json:"example,omitempty"`
+	Example json.RawMessage `json:"example,omitempty"`
 }
 
 // A metadata object that allows for more fine-tuned XML model definitions.
@@ -419,7 +419,7 @@ type SecurityScheme struct {
 	// The token URL to be used for this flow. This SHOULD be in the form of a URL.
 	TokenUrl string `json:"tokenUrl"`
 	// The available scopes for the OAuth2 security scheme.
-	Scopes *Scopes `json:"scopes"`
+	Scopes Scopes `json:"scopes"`
 }
 
 // An object to hold data types that can be consumed and produced by operations. These

@@ -35,13 +35,13 @@ var specialTypes = []struct {
 	{"Headers", `map[string]Header`},
 }
 
-func specialType(name string) (val string) {
+func specialType(name string) bool {
 	for _, t := range specialTypes {
 		if t.Name == name {
-			return t.Val
+			return true
 		}
 	}
-	return ""
+	return false
 }
 
 var omitType = map[string]bool{
@@ -60,7 +60,7 @@ var typeMappings = map[string]string{
 	"number":  "float64",
 	"boolean": "bool",
 	"integer": "int",
-	"Any":     "interface{}",
+	"Any":     "json.RawMessage",
 	"*":       "json.RawMessage",
 	"[*]":     "[]json.RawMessage",
 }
@@ -73,6 +73,9 @@ func objName(s string) string {
 }
 
 func fieldType(s string) string {
+	if specialType(s) {
+		return s
+	}
 	if r, _ := utf8.DecodeRuneInString(s); unicode.IsUpper(r) {
 		return "*" + s
 	}
@@ -186,7 +189,7 @@ import "encoding/json"
 				parseTable(c)
 			}
 		case atom.H5:
-			if text(c) != "Fixed Fields" || specialType(name) != "" {
+			if text(c) != "Fixed Fields" || specialType(name) {
 				continue
 			}
 			parseTable(c)
