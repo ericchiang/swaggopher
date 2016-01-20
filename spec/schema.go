@@ -2,98 +2,96 @@
 
 package spec
 
-import "encoding/json"
-
 // This is the root document object for the API specification. It combines what
 // previously was the Resource Listing and API Declaration (version 1.2 and earlier)
 // together into one document.
 type Swagger struct {
 	// Specifies the Swagger Specification version being used. It can be used by the
 	// Swagger UI and other clients to interpret the API listing. The value MUST be "2.0".
-	Swagger string `json:"swagger"`
+	Swagger string `json:"swagger" yaml:"swagger"`
 	// Provides metadata about the API. The metadata can be used by the clients if needed.
-	Info *Info `json:"info"`
+	Info *Info `json:"info" yaml:"info"`
 	// The host (name or ip) serving the API. This MUST be the host only and does not
 	// include the scheme nor sub-paths. It MAY include a port. If the host is not
 	// included, the host serving the documentation is to be used (including the port).
 	// The host does not support path templating.
-	Host string `json:"host,omitempty"`
+	Host string `json:"host,omitempty" yaml:"host,omitempty"`
 	// The base path on which the API is served, which is relative to the host. If it
 	// is not included, the API is served directly under the host. The value MUST start
 	// with a leading slash (/). The basePath does not support path templating.
-	BasePath string `json:"basePath,omitempty"`
+	BasePath string `json:"basePath,omitempty" yaml:"basePath,omitempty"`
 	// The transfer protocol of the API. Values MUST be from the list: "http", "https",
 	// "ws", "wss". If the schemes is not included, the default scheme to be used is
 	// the one used to access the Swagger definition itself.
-	Schemes []string `json:"schemes,omitempty"`
+	Schemes []string `json:"schemes,omitempty" yaml:"schemes,omitempty"`
 	// A list of MIME types the APIs can consume. This is global to all APIs but can be
 	// overridden on specific API calls. Value MUST be as described under Mime Types.
-	Consumes []string `json:"consumes,omitempty"`
+	Consumes []string `json:"consumes,omitempty" yaml:"consumes,omitempty"`
 	// A list of MIME types the APIs can produce. This is global to all APIs but can be
 	// overridden on specific API calls. Value MUST be as described under Mime Types.
-	Produces []string `json:"produces,omitempty"`
+	Produces []string `json:"produces,omitempty" yaml:"produces,omitempty"`
 	// The available paths and operations for the API.
-	Paths Paths `json:"paths"`
+	Paths Paths `json:"paths" yaml:"paths"`
 	// An object to hold data types produced and consumed by operations.
-	Definitions Definitions `json:"definitions,omitempty"`
+	Definitions Definitions `json:"definitions,omitempty" yaml:"definitions,omitempty"`
 	// An object to hold parameters that can be used across operations. This property
 	// does not define global parameters for all operations.
-	Parameters ParametersDefinitions `json:"parameters,omitempty"`
+	Parameters ParametersDefinitions `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 	// An object to hold responses that can be used across operations. This property
 	// does not define global responses for all operations.
-	Responses ResponsesDefinitions `json:"responses,omitempty"`
+	Responses ResponsesDefinitions `json:"responses,omitempty" yaml:"responses,omitempty"`
 	// Security scheme definitions that can be used across the specification.
-	SecurityDefinitions SecurityDefinitions `json:"securityDefinitions,omitempty"`
+	SecurityDefinitions SecurityDefinitions `json:"securityDefinitions,omitempty" yaml:"securityDefinitions,omitempty"`
 	// A declaration of which security schemes are applied for the API as a whole. The
 	// list of values describes alternative security schemes that can be used (that is,
 	// there is a logical OR between the security requirements). Individual operations
 	// can override this definition.
-	Security []SecurityRequirement `json:"security,omitempty"`
+	Security []SecurityRequirement `json:"security,omitempty" yaml:"security,omitempty"`
 	// A list of tags used by the specification with additional metadata. The order of
 	// the tags can be used to reflect on their order by the parsing tools. Not all
 	// tags that are used by the Operation Object must be declared. The tags that are
 	// not declared may be organized randomly or based on the tools' logic. Each tag
 	// name in the list MUST be unique.
-	Tags []Tag `json:"tags,omitempty"`
+	Tags []Tag `json:"tags,omitempty" yaml:"tags,omitempty"`
 	// Additional external documentation.
-	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty"`
+	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
 }
 
 // The object provides metadata about the API. The metadata can be used by the clients
 // if needed, and can be presented in the Swagger-UI for convenience.
 type Info struct {
 	// The title of the application.
-	Title string `json:"title"`
+	Title string `json:"title" yaml:"title"`
 	// A short description of the application. GFM syntax can be used for rich text representation.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// The Terms of Service for the API.
-	TermsOfService string `json:"termsOfService,omitempty"`
+	TermsOfService string `json:"termsOfService,omitempty" yaml:"termsOfService,omitempty"`
 	// The contact information for the exposed API.
-	Contact *Contact `json:"contact,omitempty"`
+	Contact *Contact `json:"contact,omitempty" yaml:"contact,omitempty"`
 	// The license information for the exposed API.
-	License *License `json:"license,omitempty"`
+	License *License `json:"license,omitempty" yaml:"license,omitempty"`
 	// Required Provides the version of the application API (not to be confused with
 	// the specification version).
-	Version string `json:"version,omitempty"`
+	Version string `json:"version,omitempty" yaml:"version,omitempty"`
 }
 
 // Contact information for the exposed API.
 type Contact struct {
 	// The identifying name of the contact person/organization.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty" yaml:"name,omitempty"`
 	// The URL pointing to the contact information. MUST be in the format of a URL.
-	Url string `json:"url,omitempty"`
+	Url string `json:"url,omitempty" yaml:"url,omitempty"`
 	// The email address of the contact person/organization. MUST be in the format of
 	// an email address.
-	Email string `json:"email,omitempty"`
+	Email string `json:"email,omitempty" yaml:"email,omitempty"`
 }
 
 // License information for the exposed API.
 type License struct {
 	// The license name used for the API.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 	// A URL to the license used for the API. MUST be in the format of a URL.
-	Url string `json:"url,omitempty"`
+	Url string `json:"url,omitempty" yaml:"url,omitempty"`
 }
 
 // Describes the operations available on a single path. A Path Item may be empty, due to
@@ -103,86 +101,86 @@ type PathItem struct {
 	// Allows for an external definition of this path item. The referenced structure
 	// MUST be in the format of a Path Item Object. If there are conflicts between the
 	// referenced definition and this Path Item's definition, the behavior is undefined.
-	Ref string `json:"$ref,omitempty"`
+	Ref string `json:"$ref,omitempty" yaml:"$ref,omitempty"`
 	// A definition of a GET operation on this path.
-	Get *Operation `json:"get,omitempty"`
+	Get *Operation `json:"get,omitempty" yaml:"get,omitempty"`
 	// A definition of a PUT operation on this path.
-	Put *Operation `json:"put,omitempty"`
+	Put *Operation `json:"put,omitempty" yaml:"put,omitempty"`
 	// A definition of a POST operation on this path.
-	Post *Operation `json:"post,omitempty"`
+	Post *Operation `json:"post,omitempty" yaml:"post,omitempty"`
 	// A definition of a DELETE operation on this path.
-	Delete *Operation `json:"delete,omitempty"`
+	Delete *Operation `json:"delete,omitempty" yaml:"delete,omitempty"`
 	// A definition of a OPTIONS operation on this path.
-	Options *Operation `json:"options,omitempty"`
+	Options *Operation `json:"options,omitempty" yaml:"options,omitempty"`
 	// A definition of a HEAD operation on this path.
-	Head *Operation `json:"head,omitempty"`
+	Head *Operation `json:"head,omitempty" yaml:"head,omitempty"`
 	// A definition of a PATCH operation on this path.
-	Patch *Operation `json:"patch,omitempty"`
+	Patch *Operation `json:"patch,omitempty" yaml:"patch,omitempty"`
 	// A list of parameters that are applicable for all the operations described under
 	// this path. These parameters can be overridden at the operation level, but cannot
 	// be removed there. The list MUST NOT include duplicated parameters. A unique
 	// parameter is defined by a combination of a name and location. The list can use
 	// the Reference Object to link to parameters that are defined at the Swagger
 	// Object's parameters. There can be one "body" parameter at most.
-	Parameters []Parameter `json:"parameters,omitempty"`
+	Parameters []Parameter `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 }
 
 // Describes a single API operation on a path.
 type Operation struct {
 	// A list of tags for API documentation control. Tags can be used for logical
 	// grouping of operations by resources or any other qualifier.
-	Tags []string `json:"tags,omitempty"`
+	Tags []string `json:"tags,omitempty" yaml:"tags,omitempty"`
 	// A short summary of what the operation does. For maximum readability in the
 	// swagger-ui, this field SHOULD be less than 120 characters.
-	Summary string `json:"summary,omitempty"`
+	Summary string `json:"summary,omitempty" yaml:"summary,omitempty"`
 	// A verbose explanation of the operation behavior. GFM syntax can be used for rich
 	// text representation.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// Additional external documentation for this operation.
-	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty"`
+	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
 	// Unique string used to identify the operation. The id MUST be unique among all
 	// operations described in the API. Tools and libraries MAY use the operationId to
 	// uniquely identify an operation, therefore, it is recommended to follow common
 	// programming naming conventions.
-	OperationId string `json:"operationId,omitempty"`
+	OperationId string `json:"operationId,omitempty" yaml:"operationId,omitempty"`
 	// A list of MIME types the operation can consume. This overrides the consumes
 	// definition at the Swagger Object. An empty value MAY be used to clear the global
 	// definition. Value MUST be as described under Mime Types.
-	Consumes []string `json:"consumes,omitempty"`
+	Consumes []string `json:"consumes,omitempty" yaml:"consumes,omitempty"`
 	// A list of MIME types the operation can produce. This overrides the produces
 	// definition at the Swagger Object. An empty value MAY be used to clear the global
 	// definition. Value MUST be as described under Mime Types.
-	Produces []string `json:"produces,omitempty"`
+	Produces []string `json:"produces,omitempty" yaml:"produces,omitempty"`
 	// A list of parameters that are applicable for this operation. If a parameter is
 	// already defined at the Path Item, the new definition will override it, but can
 	// never remove it. The list MUST NOT include duplicated parameters. A unique
 	// parameter is defined by a combination of a name and location. The list can use
 	// the Reference Object to link to parameters that are defined at the Swagger
 	// Object's parameters. There can be one "body" parameter at most.
-	Parameters []Parameter `json:"parameters,omitempty"`
+	Parameters []Parameter `json:"parameters,omitempty" yaml:"parameters,omitempty"`
 	// The list of possible responses as they are returned from executing this operation.
-	Responses Responses `json:"responses"`
+	Responses Responses `json:"responses" yaml:"responses"`
 	// The transfer protocol for the operation. Values MUST be from the list: "http",
 	// "https", "ws", "wss". The value overrides the Swagger Object schemes definition.
-	Schemes []string `json:"schemes,omitempty"`
+	Schemes []string `json:"schemes,omitempty" yaml:"schemes,omitempty"`
 	// Declares this operation to be deprecated. Usage of the declared operation should
 	// be refrained. Default value is false.
-	Deprecated bool `json:"deprecated,omitempty"`
+	Deprecated bool `json:"deprecated,omitempty" yaml:"deprecated,omitempty"`
 	// A declaration of which security schemes are applied for this operation. The list
 	// of values describes alternative security schemes that can be used (that is,
 	// there is a logical OR between the security requirements). This definition
 	// overrides any declared top-level security. To remove a top-level security
 	// declaration, an empty array can be used.
-	Security []SecurityRequirement `json:"security,omitempty"`
+	Security []SecurityRequirement `json:"security,omitempty" yaml:"security,omitempty"`
 }
 
 // Allows referencing an external resource for extended documentation.
 type ExternalDocumentation struct {
 	// A short description of the target documentation. GFM syntax can be used for rich
 	// text representation.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// The URL for the target documentation. Value MUST be in the format of a URL.
-	Url string `json:"url"`
+	Url string `json:"url" yaml:"url"`
 }
 
 // Describes a single operation parameter.
@@ -195,17 +193,17 @@ type Parameter struct {
 	// the name field MUST correspond to the associated path segment from the path
 	// field in the Paths Object. See Path Templating for further information.For all
 	// other cases, the name corresponds to the parameter name used based on the in property.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 	// The location of the parameter. Possible values are "query", "header", "path",
 	// "formData" or "body".
-	In string `json:"in"`
+	In string `json:"in" yaml:"in"`
 	// A brief description of the parameter. This could contain examples of use.  GFM
 	// syntax can be used for rich text representation.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// Determines whether this parameter is mandatory. If the parameter is in "path",
 	// this property is required and its value MUST be true. Otherwise, the property
 	// MAY be included and its default value is false.
-	Required bool `json:"required,omitempty"`
+	Required bool `json:"required,omitempty" yaml:"required,omitempty"`
 }
 
 // A limited subset of JSON-Schema's items object. It is used by parameter definitions
@@ -213,120 +211,120 @@ type Parameter struct {
 type Items struct {
 	// The internal type of the array. The value MUST be one of "string", "number",
 	// "integer", "boolean", or "array". Files and models are not allowed.
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"type"`
 	// The extending format for the previously mentioned type. See Data Type Formats
 	// for further details.
-	Format string `json:"format,omitempty"`
+	Format string `json:"format,omitempty" yaml:"format,omitempty"`
 	// Required if type is "array". Describes the type of items in the array.
-	Items *Items `json:"items,omitempty"`
+	Items *Items `json:"items,omitempty" yaml:"items,omitempty"`
 	// Determines the format of the array if type array is used. Possible values are:
 	// csv - comma separated values foo,bar. ssv - space separated values foo bar. tsv
 	// - tab separated values foo\tbar. pipes - pipe separated values foo|bar.  Default
 	// value is csv.
-	CollectionFormat string `json:"collectionFormat,omitempty"`
+	CollectionFormat string `json:"collectionFormat,omitempty" yaml:"collectionFormat,omitempty"`
 	// Declares the value of the item that the server will use if none is provided.
 	// (Note: "default" has no meaning for required items.) See
 	// http://json-schema.org/latest/json-schema-validation.html#anchor101. Unlike JSON
 	// Schema this value MUST conform to the defined type for the data type.
-	Default json.RawMessage `json:"default,omitempty"`
+	Default interface{} `json:"default,omitempty" yaml:"default,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
-	Maximum float64 `json:"maximum,omitempty"`
+	Maximum float64 `json:"maximum,omitempty" yaml:"maximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
-	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
+	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty" yaml:"exclusiveMaximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
-	Minimum float64 `json:"minimum,omitempty"`
+	Minimum float64 `json:"minimum,omitempty" yaml:"minimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
-	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty"`
+	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty" yaml:"exclusiveMinimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor26.
-	MaxLength int `json:"maxLength,omitempty"`
+	MaxLength int `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor29.
-	MinLength int `json:"minLength,omitempty"`
+	MinLength int `json:"minLength,omitempty" yaml:"minLength,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor33.
-	Pattern string `json:"pattern,omitempty"`
+	Pattern string `json:"pattern,omitempty" yaml:"pattern,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor42.
-	MaxItems int `json:"maxItems,omitempty"`
+	MaxItems int `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor45.
-	MinItems int `json:"minItems,omitempty"`
+	MinItems int `json:"minItems,omitempty" yaml:"minItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor49.
-	UniqueItems bool `json:"uniqueItems,omitempty"`
+	UniqueItems bool `json:"uniqueItems,omitempty" yaml:"uniqueItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor76.
-	Enum []json.RawMessage `json:"enum,omitempty"`
+	Enum []interface{} `json:"enum,omitempty" yaml:"enum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor14.
-	MultipleOf float64 `json:"multipleOf,omitempty"`
+	MultipleOf float64 `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
 }
 
 // Describes a single response from an API Operation.
 type Response struct {
 	// A short description of the response. GFM syntax can be used for rich text representation.
-	Description string `json:"description"`
+	Description string `json:"description" yaml:"description"`
 	// A definition of the response structure. It can be a primitive, an array or an
 	// object. If this field does not exist, it means no content is returned as part of
 	// the response. As an extension to the Schema Object, its root type value may also
 	// be "file". This SHOULD be accompanied by a relevant produces mime-type.
-	Schema *Schema `json:"schema,omitempty"`
+	Schema *Schema `json:"schema,omitempty" yaml:"schema,omitempty"`
 	// A list of headers that are sent with the response.
-	Headers Headers `json:"headers,omitempty"`
+	Headers Headers `json:"headers,omitempty" yaml:"headers,omitempty"`
 	// An example of the response message.
-	Examples Example `json:"examples,omitempty"`
+	Examples Example `json:"examples,omitempty" yaml:"examples,omitempty"`
 }
 
 
 type Header struct {
 	// A short description of the header.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// The type of the object. The value MUST be one of "string", "number", "integer",
 	// "boolean", or "array".
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"type"`
 	// The extending format for the previously mentioned type. See Data Type Formats
 	// for further details.
-	Format string `json:"format,omitempty"`
+	Format string `json:"format,omitempty" yaml:"format,omitempty"`
 	// Required if type is "array". Describes the type of items in the array.
-	Items *Items `json:"items,omitempty"`
+	Items *Items `json:"items,omitempty" yaml:"items,omitempty"`
 	// Determines the format of the array if type array is used. Possible values are:
 	// csv - comma separated values foo,bar. ssv - space separated values foo bar. tsv
 	// - tab separated values foo\tbar. pipes - pipe separated values foo|bar.  Default
 	// value is csv.
-	CollectionFormat string `json:"collectionFormat,omitempty"`
+	CollectionFormat string `json:"collectionFormat,omitempty" yaml:"collectionFormat,omitempty"`
 	// Declares the value of the header that the server will use if none is provided.
 	// (Note: "default" has no meaning for required headers.) See
 	// http://json-schema.org/latest/json-schema-validation.html#anchor101. Unlike JSON
 	// Schema this value MUST conform to the defined type for the header.
-	Default json.RawMessage `json:"default,omitempty"`
+	Default interface{} `json:"default,omitempty" yaml:"default,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
-	Maximum float64 `json:"maximum,omitempty"`
+	Maximum float64 `json:"maximum,omitempty" yaml:"maximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor17.
-	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty"`
+	ExclusiveMaximum bool `json:"exclusiveMaximum,omitempty" yaml:"exclusiveMaximum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
-	Minimum float64 `json:"minimum,omitempty"`
+	Minimum float64 `json:"minimum,omitempty" yaml:"minimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor21.
-	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty"`
+	ExclusiveMinimum bool `json:"exclusiveMinimum,omitempty" yaml:"exclusiveMinimum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor26.
-	MaxLength int `json:"maxLength,omitempty"`
+	MaxLength int `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor29.
-	MinLength int `json:"minLength,omitempty"`
+	MinLength int `json:"minLength,omitempty" yaml:"minLength,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor33.
-	Pattern string `json:"pattern,omitempty"`
+	Pattern string `json:"pattern,omitempty" yaml:"pattern,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor42.
-	MaxItems int `json:"maxItems,omitempty"`
+	MaxItems int `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor45.
-	MinItems int `json:"minItems,omitempty"`
+	MinItems int `json:"minItems,omitempty" yaml:"minItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor49.
-	UniqueItems bool `json:"uniqueItems,omitempty"`
+	UniqueItems bool `json:"uniqueItems,omitempty" yaml:"uniqueItems,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor76.
-	Enum []json.RawMessage `json:"enum,omitempty"`
+	Enum []interface{} `json:"enum,omitempty" yaml:"enum,omitempty"`
 	// See http://json-schema.org/latest/json-schema-validation.html#anchor14.
-	MultipleOf float64 `json:"multipleOf,omitempty"`
+	MultipleOf float64 `json:"multipleOf,omitempty" yaml:"multipleOf,omitempty"`
 }
 
 // Allows adding meta data to a single tag that is used by the Operation Object. It is
 // not mandatory to have a Tag Object per tag used there.
 type Tag struct {
 	// The name of the tag.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 	// A short description for the tag. GFM syntax can be used for rich text representation.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// Additional external documentation for this tag.
-	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty"`
+	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
 }
 
 // A simple object to allow referencing other definitions in the specification. It can
@@ -336,7 +334,7 @@ type Tag struct {
 // this specification, only canonical dereferencing is supported.
 type Reference struct {
 	// The reference string.
-	Ref string `json:"$ref"`
+	Ref string `json:"$ref" yaml:"$ref"`
 }
 
 // The Schema Object allows the definition of input and output data types. These types
@@ -357,19 +355,19 @@ type Schema struct {
 	// property name used MUST be defined at this schema and it MUST be in the required
 	// property list. When used, the value MUST be the name of this schema or any
 	// schema that inherits it.
-	Discriminator string `json:"discriminator,omitempty"`
+	Discriminator string `json:"discriminator,omitempty" yaml:"discriminator,omitempty"`
 	// Relevant only for Schema "properties" definitions. Declares the property as
 	// "read only". This means that it MAY be sent as part of a response but MUST NOT
 	// be sent as part of the request. Properties marked as readOnly being true SHOULD
 	// NOT be in the required list of the defined schema. Default value is false.
-	ReadOnly bool `json:"readOnly,omitempty"`
+	ReadOnly bool `json:"readOnly,omitempty" yaml:"readOnly,omitempty"`
 	// This MAY be used only on properties schemas. It has no effect on root schemas.
 	// Adds Additional metadata to describe the XML representation format of this property.
-	Xml *XML `json:"xml,omitempty"`
+	Xml *XML `json:"xml,omitempty" yaml:"xml,omitempty"`
 	// Additional external documentation for this schema.
-	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty"`
+	ExternalDocs *ExternalDocumentation `json:"externalDocs,omitempty" yaml:"externalDocs,omitempty"`
 	// A free-form property to include a an example of an instance for this schema.
-	Example json.RawMessage `json:"example,omitempty"`
+	Example interface{} `json:"example,omitempty" yaml:"example,omitempty"`
 }
 
 // A metadata object that allows for more fine-tuned XML model definitions.
@@ -382,19 +380,19 @@ type XML struct {
 	// of the individual XML elements within the list. When defined alongside type
 	// being array (outside the items), it will affect the wrapping element and only if
 	// wrapped is true. If wrapped is false, it will be ignored.
-	Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty" yaml:"name,omitempty"`
 	// The URL of the namespace definition. Value SHOULD be in the form of a URL.
-	Namespace string `json:"namespace,omitempty"`
+	Namespace string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
 	// The prefix to be used for the name.
-	Prefix string `json:"prefix,omitempty"`
+	Prefix string `json:"prefix,omitempty" yaml:"prefix,omitempty"`
 	// Declares whether the property definition translates to an attribute instead of
 	// an element. Default value is false.
-	Attribute bool `json:"attribute,omitempty"`
+	Attribute bool `json:"attribute,omitempty" yaml:"attribute,omitempty"`
 	// MAY be used only for an array definition. Signifies whether the array is wrapped
 	// (for example, <books><book/><book/></books>) or unwrapped (<book/><book/>).
 	// Default value is false. The definition takes effect only when defined alongside
 	// type being array (outside the items).
-	Wrapped bool `json:"wrapped,omitempty"`
+	Wrapped bool `json:"wrapped,omitempty" yaml:"wrapped,omitempty"`
 }
 
 // Allows the definition of a security scheme that can be used by the operations.
@@ -403,23 +401,23 @@ type XML struct {
 // access code).
 type SecurityScheme struct {
 	// The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"type"`
 	// A short description for security scheme.
-	Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty" yaml:"description,omitempty"`
 	// The name of the header or query parameter to be used.
-	Name string `json:"name"`
+	Name string `json:"name" yaml:"name"`
 	// Required The location of the API key. Valid values are "query" or "header".
-	In string `json:"in,omitempty"`
+	In string `json:"in,omitempty" yaml:"in,omitempty"`
 	// The flow used by the OAuth2 security scheme. Valid values are "implicit",
 	// "password", "application" or "accessCode".
-	Flow string `json:"flow"`
+	Flow string `json:"flow" yaml:"flow"`
 	// The authorization URL to be used for this flow. This SHOULD be in the form of a
 	// URL.
-	AuthorizationUrl string `json:"authorizationUrl"`
+	AuthorizationUrl string `json:"authorizationUrl" yaml:"authorizationUrl"`
 	// The token URL to be used for this flow. This SHOULD be in the form of a URL.
-	TokenUrl string `json:"tokenUrl"`
+	TokenUrl string `json:"tokenUrl" yaml:"tokenUrl"`
 	// The available scopes for the OAuth2 security scheme.
-	Scopes Scopes `json:"scopes"`
+	Scopes Scopes `json:"scopes" yaml:"scopes"`
 }
 
 // An object to hold data types that can be consumed and produced by operations. These
@@ -427,7 +425,7 @@ type SecurityScheme struct {
 type Definitions map[string]Schema
 
 // Allows sharing examples for operation responses.
-type Example map[string]json.RawMessage
+type Example map[string]interface{}
 
 // Holds the relative paths to the individual endpoints. The path is appended to the
 // basePath in order to construct the full URL. The Paths may be empty, due to ACL constraints.
